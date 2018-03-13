@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="lib/bootstrap.min.css">
+    <script src="lib/jquery-1.7.2.js"></script>
+    <script src="lib/bootstrap.js"></script>
+    <script src="vue.js"></script>
+</head>
+<body>
+  <div class="container">
+      <form role="form">
+          <div class="form-group">
+              <label for="username">用户名</label>
+              <input type="text" id="username" class="form-control" v-model="username">
+          </div>
+          <div class="form-group">
+              <label for="age">年龄</label>
+              <input type="text" id="age" class="form-control" v-model="userage">
+          </div>
+          <div class="form-group">
+              <input type="button" id="add" value="添加" class="btn btn-primary" v-on:click="add">
+              <input type="reset" value="重置" class="btn btn-danger">
+          </div>
+      </form>
+      <hr>
+      <table class="table table-bordered table-hover">
+          <caption class="h2 text-info">用户信息</caption>
+          <tr>
+              <th class="text-center">序号</th>
+              <th class="text-center">名字</th>
+              <th class="text-center">年龄</th>
+              <th class="text-center">操作</th>
+          </tr>
+          <tr class="text-center cont" v-for="item in myData"  data-toggle="modal" data-target="#box">
+              <td>{{$index+1}}</td>
+              <td>{{item.username}}</td>
+              <td>{{item.userage}}</td>
+              <td>
+                  <button class="delete btn btn-danger btn-sm" v-on:click="nowIndex=$index">删除</button>
+              </td>
+          </tr>
+          <tr v-show="myData.length !=0">
+              <td colspan="4" class="text-right">
+                  <button class="btn btn-danger btn-sm">删除全部</button>
+              </td>
+          </tr>
+          <tr v-show="myData.length == 0">
+             <td colspan="4" class="text-center text-muted">
+                 <p>暂无数据</p>
+             </td>
+          </tr>
+      </table>
+      <!--模态框-->
+      <div role="dialog" class="modal" id="box">
+         <div class="modal-dialog">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <button class="close" data-dismiss="modal">
+                         <span>&times;</span>
+                     </button>
+                     <h4 class="modal-title">确认删除？</h4>
+                 </div>
+                 <div class="modal-body text-right">
+                     <button class="btn btn-primary btn-sm" data-dismiss="modal">取消</button>
+                     <button class="btn btn-primary btn-sm" data-dismiss="modal" v-on:click="delete(nowIndex)">确认</button>
+                 </div>
+             </div>
+         </div>
+      </div>
+  </div>
+<script>
+    window.onload = function() {
+      var vue = new Vue({
+        el:'.container',
+        data:{
+          myData:[],
+          username:'',
+          userage:'',
+          nowIndex:-100
+        },
+        methods:{
+          delete:function(n) {
+            this.myData.splice(n,1);
+          },
+          add:add
+        }
+      });
+
+      //获取用户输入的数据
+      function add() {
+
+        vue.myData.push({
+          username:this.username,
+          userage:this.userage
+        })
+        this.username = '';
+        this.userage = ''
+
+        //利用jQuery进行的dom操作 很显然的操作麻烦
+//        var userName = $('#username').val();
+//        var userAge  = $('#age').val();
+//
+//        var obj = {
+//          name:userName,
+//          age:userAge
+//        }
+//
+//        vue.myData.push(obj);
+//        //清空输入框中的数据
+//        $('#username')[0].value = '';
+//        $('#age')[0].value = '';
+//
+//        console.log(vue.myData.length);
+      }
+      //删除
+      //function move(){
+//        $('tr.cont').on('click','td>button.delete',function() {
+//          //console.log('ssss');
+//          $(this).parent().parent().remove();
+//        });
+  //    }
+    }
+</script>
+</body>
+</html>
